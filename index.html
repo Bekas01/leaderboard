@@ -351,6 +351,7 @@
 
   let managers = [];
   let isAnimating = false;
+  let soundPlayed = false;
 
   // ── ПЕРВАЯ ЗАГРУЗКА — просто рисуем без анимации ──
   async function loadManagers() {
@@ -408,9 +409,10 @@
     const oldIndex   = oldOrder.findIndex(m => m.id === changedManagerId);
     const newIndex   = newData.findIndex(m => m.id === changedManagerId);
 
-    // ШАГ 1: показать попап + конфетти
+    // ШАГ 1: показать попап + конфетти (только один раз)
     const sale = pendingSale;
-    if (sale && changedMgr) {
+    if (sale && changedMgr && !soundPlayed) {
+      soundPlayed = true;
       showPopup(changedMgr.name, sale.amount);
       playSound();
       launchConfetti();
@@ -432,6 +434,7 @@
 
     isAnimating = false;
     pendingSale = null;
+    soundPlayed = false;
   }
 
   // Плавное перемещение строк через абсолютное позиционирование
@@ -499,6 +502,7 @@
 
   db.channel('sales-rt')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sales' }, (payload) => {
+      // сохраняем продажу — звук и попап запустятся в animatedUpdate
       pendingSale = payload.new;
     })
     .subscribe();
