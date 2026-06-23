@@ -43,7 +43,6 @@
       padding: 0 32px;
     }
 
-    /* === HEADER === */
     .header {
       display: flex;
       justify-content: space-between;
@@ -67,10 +66,7 @@
       gap: 6px;
     }
 
-    .plan-box {
-      text-align: right;
-    }
-
+    .plan-box { text-align: right; }
     .plan-box .label {
       font-size: 0.72rem;
       text-transform: uppercase;
@@ -79,18 +75,15 @@
       font-weight: 600;
       margin-bottom: 4px;
     }
-
     .plan-box .amount {
       font-size: 2rem;
       font-weight: 800;
       color: var(--green);
     }
 
-    /* === ROWS === */
+    /* === BOARD — позиционирование для анимации === */
     .board {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      position: relative;
     }
 
     .row {
@@ -103,12 +96,22 @@
       border: 2px solid var(--border);
       box-shadow: var(--card-shadow);
       position: relative;
-      transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+      /* плавное перемещение через top */
+      transition: top 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.3s ease,
+                  border-color 0.3s ease;
+      margin-bottom: 12px;
     }
 
     .row.rank-1 {
       border-color: var(--gold-border);
       box-shadow: var(--card-shadow-gold);
+    }
+
+    /* подсветка строки при движении вверх */
+    .row.moving-up {
+      box-shadow: 0 0 0 3px var(--accent), 0 8px 30px rgba(99,102,241,0.25);
+      z-index: 10;
     }
 
     .rank-badge {
@@ -125,6 +128,7 @@
       font-weight: 800;
       color: #fff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: background 0.5s ease;
     }
 
     .rank-1 .rank-badge { background: var(--gold); }
@@ -143,6 +147,7 @@
       font-size: 1.1rem;
       flex-shrink: 0;
       overflow: hidden;
+      transition: background 0.5s, color 0.5s;
     }
 
     .rank-1 .avatar { background: var(--gold-bg); color: var(--gold); }
@@ -150,42 +155,20 @@
     .rank-3 .avatar { background: var(--bronze-bg); color: var(--bronze); }
     .rank-other .avatar { background: #f1f5f9; color: #94a3b8; }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* indent lower ranks slightly */
     .rank-2, .rank-3, .rank-other { margin-left: 16px; }
 
     .info { flex: 1; }
-
-    .info .name {
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: var(--text);
-    }
-
+    .info .name { font-weight: 700; font-size: 1.05rem; color: var(--text); }
     .rank-1 .info .name { font-size: 1.2rem; }
+    .info .deals { font-size: 0.8rem; color: var(--text-secondary); margin-top: 3px; }
 
-    .info .deals {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-top: 3px;
-    }
-
-    .total {
-      font-weight: 800;
-      text-align: right;
-      color: var(--text);
-    }
-
+    .total { font-weight: 800; text-align: right; color: var(--text); transition: color 0.5s; }
     .rank-1 .total { font-size: 1.6rem; }
     .rank-2 .total, .rank-3 .total { font-size: 1.25rem; color: #334155; }
     .rank-other .total { font-size: 1.1rem; color: #475569; }
 
-    /* progress bar */
     .progress-wrap {
       position: absolute;
       bottom: 0; left: 0; right: 0;
@@ -206,11 +189,9 @@
     .rank-2 .progress-bar { background: var(--silver); }
     .rank-3 .progress-bar { background: var(--bronze); }
 
-    /* === STATUS DOT === */
     .status-dot {
       display: inline-block;
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--green);
       animation: pulse 2s infinite;
@@ -236,10 +217,7 @@
       transition: opacity 0.3s;
     }
 
-    .popup-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .popup-overlay.active { opacity: 1; pointer-events: all; }
 
     .popup {
       background: #fff;
@@ -254,24 +232,11 @@
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .popup-overlay.active .popup {
-      transform: scale(1) translateY(0);
-    }
+    .popup-overlay.active .popup { transform: scale(1) translateY(0); }
 
     .popup-icon { font-size: 3.5rem; margin-bottom: 16px; }
-
-    .popup h2 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .popup .manager-name {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      margin-bottom: 24px;
-    }
+    .popup h2 { font-size: 1.8rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .popup .manager-name { color: var(--text-secondary); font-size: 1rem; margin-bottom: 24px; }
 
     .popup-amount {
       background: var(--green-bg);
@@ -279,7 +244,6 @@
       padding: 24px;
       margin-bottom: 20px;
     }
-
     .popup-amount .label {
       font-size: 0.72rem;
       text-transform: uppercase;
@@ -288,20 +252,9 @@
       font-weight: 700;
       margin-bottom: 10px;
     }
+    .popup-amount .value { font-size: 3.2rem; font-weight: 900; color: var(--green); line-height: 1; }
+    .popup-footer { font-size: 0.88rem; color: var(--text-secondary); }
 
-    .popup-amount .value {
-      font-size: 3.2rem;
-      font-weight: 900;
-      color: var(--green);
-      line-height: 1;
-    }
-
-    .popup-footer {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-    }
-
-    /* === CANVAS === */
     #confetti-canvas {
       position: fixed;
       inset: 0;
@@ -309,7 +262,6 @@
       z-index: 99;
     }
 
-    /* === DEMO BUTTON === */
     .demo-btn {
       position: fixed;
       bottom: 24px;
@@ -327,18 +279,7 @@
       transition: opacity 0.2s, transform 0.1s;
       z-index: 200;
     }
-
     .demo-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .demo-btn:active { transform: translateY(0); }
-
-    .animate-in {
-      animation: rowIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    @keyframes rowIn {
-      from { transform: translateX(-16px); opacity: 0; }
-      to   { transform: translateX(0);     opacity: 1; }
-    }
   </style>
 </head>
 <body>
@@ -346,8 +287,6 @@
 <canvas id="confetti-canvas"></canvas>
 
 <div class="container">
-
-  <!-- HEADER -->
   <div class="header">
     <div class="header-left">
       <h1>🏆 Рейтинг продаж</h1>
@@ -362,14 +301,11 @@
     </div>
   </div>
 
-  <!-- LEADERBOARD -->
   <div class="board" id="board">
     <p style="color:#94a3b8;text-align:center;padding:40px 0">Загрузка...</p>
   </div>
-
 </div>
 
-<!-- POPUP -->
 <div class="popup-overlay" id="popup">
   <div class="popup">
     <div class="popup-icon">💸</div>
@@ -386,11 +322,10 @@
 <button class="demo-btn" onclick="simulateSale()">⚡ Симуляция продажи</button>
 
 <script>
-  // ── КОНФИГУРАЦИЯ ──────────────────────────────────────────
-  const SUPABASE_URL     = 'https://httlwebnzuhytqpoyjvt.supabase.co';
+  const SUPABASE_URL      = 'https://httlwebnzuhytqpoyjvt.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0dGx3ZWJuenVoeXRxcG95anZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMzUyNzUsImV4cCI6MjA5NzgxMTI3NX0.hzlIfomYy0YG1Blwgl9RafA1l0EJX7mGmKyydeaiJCw';
-  const PLAN_AMOUNT      = 8_450_000;
-  // ──────────────────────────────────────────────────────────
+  const PLAN_AMOUNT       = 8_450_000;
+  const ROW_HEIGHT        = 88; // высота строки + gap в пикселях
 
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -399,26 +334,12 @@
     new Date().toLocaleString('ru', { month: 'long', year: 'numeric' });
   document.getElementById('plan-display').textContent = fmt(PLAN_AMOUNT);
 
-  function fmt(n) {
-    return new Intl.NumberFormat('ru-KZ').format(n) + ' ₸';
-  }
+  function fmt(n) { return new Intl.NumberFormat('ru-KZ').format(n) + ' ₸'; }
 
   function pluralDeals(n) {
     if (n % 10 === 1 && n % 100 !== 11) return 'успешная сделка';
     if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'успешные сделки';
     return 'успешных сделок';
-  }
-
-  let managers = [];
-
-  async function loadManagers() {
-    const { data, error } = await db
-      .from('managers')
-      .select('*')
-      .order('total_amount', { ascending: false });
-    if (error) { console.error(error); return; }
-    managers = data || [];
-    renderBoard(managers);
   }
 
   function rankClass(i) {
@@ -428,58 +349,168 @@
     return 'rank-other';
   }
 
-  function renderBoard(list) {
+  let managers = [];
+  let isAnimating = false;
+
+  // ── ПЕРВАЯ ЗАГРУЗКА — просто рисуем без анимации ──
+  async function loadManagers() {
+    const { data, error } = await db
+      .from('managers')
+      .select('*')
+      .order('total_amount', { ascending: false });
+    if (error) { console.error(error); return; }
+    managers = data || [];
+    renderBoardStatic(managers);
+  }
+
+  function renderBoardStatic(list) {
     const board = document.getElementById('board');
     board.innerHTML = '';
+    board.style.height = '';
     list.forEach((m, i) => {
-      const cls   = rankClass(i);
-      const pct   = Math.min(100, Math.round((m.total_amount / PLAN_AMOUNT) * 100));
-      const init  = m.initials || m.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-      const row   = document.createElement('div');
-      row.className = `row ${cls} animate-in`;
-      row.dataset.id = m.id;
-      row.innerHTML = `
-        <div class="rank-badge">${i + 1}</div>
-        <div class="avatar">
-          ${m.photo_url ? `<img src="${m.photo_url}" alt="${m.name}">` : init}
-        </div>
-        <div class="info">
-          <div class="name">${m.name}</div>
-          <div class="deals">${m.deals_count} ${pluralDeals(m.deals_count)}</div>
-        </div>
-        <div class="total">${fmt(m.total_amount)}</div>
-        <div class="progress-wrap">
-          <div class="progress-bar" style="width:${pct}%"></div>
-        </div>
-      `;
+      const row = createRow(m, i);
       board.appendChild(row);
     });
   }
 
-  // Realtime
+  function createRow(m, i) {
+    const cls  = rankClass(i);
+    const pct  = Math.min(100, Math.round((m.total_amount / PLAN_AMOUNT) * 100));
+    const init = m.initials || m.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const row  = document.createElement('div');
+    row.className = `row ${cls}`;
+    row.dataset.id = m.id;
+    row.innerHTML = `
+      <div class="rank-badge">${i + 1}</div>
+      <div class="avatar">${m.photo_url ? `<img src="${m.photo_url}" alt="${m.name}">` : init}</div>
+      <div class="info">
+        <div class="name">${m.name}</div>
+        <div class="deals">${m.deals_count} ${pluralDeals(m.deals_count)}</div>
+      </div>
+      <div class="total">${fmt(m.total_amount)}</div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+    `;
+    return row;
+  }
+
+  // ── АНИМИРОВАННОЕ ОБНОВЛЕНИЕ ──
+  // Шаг 1: конфетти + попап (5 сек)
+  // Шаг 2: закрываем попап → анимируем перемещение строк
+  async function animatedUpdate(changedManagerId, newData) {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const oldOrder = [...managers]; // старый порядок
+    managers = newData;             // новый порядок
+
+    // найти менеджера который вырос
+    const changedMgr = newData.find(m => m.id === changedManagerId);
+    const oldIndex   = oldOrder.findIndex(m => m.id === changedManagerId);
+    const newIndex   = newData.findIndex(m => m.id === changedManagerId);
+
+    // ШАГ 1: показать попап + конфетти
+    const sale = pendingSale;
+    if (sale && changedMgr) {
+      showPopup(changedMgr.name, sale.amount);
+      playSound();
+      launchConfetti();
+    }
+
+    // ШАГ 2: через 3.5 сек закрыть попап и анимировать таблицу
+    await sleep(3500);
+    document.getElementById('popup').classList.remove('active');
+
+    await sleep(300); // небольшая пауза после закрытия попапа
+
+    if (oldIndex !== newIndex && oldIndex > newIndex) {
+      // менеджер поднялся — анимируем
+      await animateReorder(oldOrder, newData, changedManagerId);
+    } else {
+      // просто обновляем цифры без перемещения
+      renderBoardStatic(newData);
+    }
+
+    isAnimating = false;
+    pendingSale = null;
+  }
+
+  // Плавное перемещение строк через абсолютное позиционирование
+  async function animateReorder(oldOrder, newOrder, movedId) {
+    const board = document.getElementById('board');
+    const rows  = Array.from(board.querySelectorAll('.row'));
+
+    // зафиксировать высоту board чтобы не прыгал
+    const totalH = rows.reduce((s, r) => s + r.offsetHeight + 12, 0);
+    board.style.height = totalH + 'px';
+
+    // перевести все строки в absolute с текущими позициями
+    let currentTop = 0;
+    const positions = {}; // id -> top
+    rows.forEach(r => {
+      const h = r.offsetHeight;
+      positions[r.dataset.id] = currentTop;
+      r.style.position = 'absolute';
+      r.style.width    = '100%';
+      r.style.top      = currentTop + 'px';
+      r.style.transition = 'none';
+      currentTop += h + 12;
+    });
+
+    // подсветить поднимающуюся строку
+    const movedRow = board.querySelector(`[data-id="${movedId}"]`);
+    if (movedRow) movedRow.classList.add('moving-up');
+
+    await sleep(50); // дать браузеру применить позиции
+
+    // включить transition и установить новые позиции
+    let newTop = 0;
+    newOrder.forEach((m, i) => {
+      const row = board.querySelector(`[data-id="${m.id}"]`);
+      if (!row) return;
+      row.style.transition = 'top 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+      row.style.top = newTop + 'px';
+      newTop += row.offsetHeight + 12;
+    });
+
+    await sleep(900); // ждём конца анимации
+
+    // убрать подсветку и перерисовать нормально
+    if (movedRow) movedRow.classList.remove('moving-up');
+    renderBoardStatic(newOrder);
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  // ── REALTIME ──
+  let pendingSale = null;
+
   db.channel('managers-rt')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'managers' }, loadManagers)
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'managers' }, async () => {
+      if (isAnimating) return;
+      const { data } = await db
+        .from('managers')
+        .select('*')
+        .order('total_amount', { ascending: false });
+      if (!data) return;
+      const changedId = pendingSale ? pendingSale.manager_id : null;
+      await animatedUpdate(changedId, data);
+    })
     .subscribe();
 
   db.channel('sales-rt')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sales' }, (payload) => {
-      const sale = payload.new;
-      const mgr  = managers.find(m => m.id === sale.manager_id);
-      if (mgr) showPopup(mgr.name, sale.amount);
+      pendingSale = payload.new;
     })
     .subscribe();
 
-  // Popup
+  // ── ПОПАП ──
   function showPopup(name, amount) {
     document.getElementById('popup-manager').textContent = name + ' только что закрыл сделку';
     document.getElementById('popup-value').textContent   = '+' + fmt(amount);
-    const overlay = document.getElementById('popup');
-    overlay.classList.add('active');
-    playSound();
-    launchConfetti();
-    setTimeout(() => overlay.classList.remove('active'), 5000);
+    document.getElementById('popup').classList.add('active');
   }
 
+  // ── ЗВУК ──
   function playSound() {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -496,20 +527,21 @@
     } catch(e) {}
   }
 
+  // ── КОНФЕТТИ ──
   function launchConfetti() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx    = canvas.getContext('2d');
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     const colors  = ['#eab308','#059669','#6366f1','#f43f5e','#38bdf8','#f97316'];
-    const pieces  = Array.from({ length: 130 }, () => ({
+    const pieces  = Array.from({ length: 150 }, () => ({
       x: Math.random() * canvas.width,
-      y: -20 - Math.random() * 150,
+      y: -20 - Math.random() * 200,
       w: 8 + Math.random() * 9,
       h: 5 + Math.random() * 6,
       color: colors[Math.floor(Math.random() * colors.length)],
       vx: (Math.random() - 0.5) * 5,
-      vy: 3 + Math.random() * 4,
+      vy: 2 + Math.random() * 4,
       angle: Math.random() * 360,
       spin: (Math.random() - 0.5) * 9,
     }));
@@ -520,11 +552,11 @@
       pieces.forEach(p => {
         if (p.y > canvas.height + 20) return;
         alive = true;
-        p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.angle += p.spin;
+        p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.angle += p.spin;
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.angle * Math.PI / 180);
-        ctx.globalAlpha = Math.max(0, 1 - p.y / (canvas.height * 0.9));
+        ctx.globalAlpha = Math.max(0, 1 - p.y / (canvas.height * 0.95));
         ctx.fillStyle = p.color;
         ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
         ctx.restore();
@@ -536,11 +568,12 @@
     draw();
   }
 
-  // Симуляция
+  // ── СИМУЛЯЦИЯ ──
   async function simulateSale() {
-    if (!managers.length) { alert('Менеджеры не загружены'); return; }
+    if (isAnimating || !managers.length) return;
     const mgr    = managers[Math.floor(Math.random() * managers.length)];
     const amount = (Math.floor(Math.random() * 9) + 1) * 50000;
+    pendingSale  = { manager_id: mgr.id, amount };
     await db.from('sales').insert({ manager_id: mgr.id, amount });
     await db.from('managers').update({
       total_amount: mgr.total_amount + amount,
